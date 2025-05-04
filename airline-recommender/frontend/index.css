@@ -1,0 +1,37 @@
+body {
+    margin: 0;
+    background-color: #111;
+    color: #fff;
+    font-family: sans-serif;
+  }
+  
+  .container {
+    padding: 2rem;
+    text-align: center;
+  }
+  
+  .grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+  
+  .card {
+    background: #1f1f1f;
+    padding: 1rem;
+    border-radius: 8px;
+    width: 200px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+  }
+  
+  .card.healthy {
+    border: 2px solid limegreen;
+  }
+  
+  .card.error,
+  .card.unhealthy {
+    border: 2px solid crimson;
+  }
+  

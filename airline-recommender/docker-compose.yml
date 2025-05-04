@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27117:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=password
+    volumes:
+      - mongodb_data:/data/db
+
+  data-service:
+    build:
+      context: ./data-service
+      dockerfile: ../Dockerfile.data-service
+    ports:
+      - "8100:8000"  
+    depends_on:
+      - mongodb
+    environment:
+      - MONGODB_URI=mongodb://admin:password@mongodb:27017
+      - DATABASE_NAME=flight_data
+    volumes:
+      - ./data-service/dataset:/app/dataset
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:8000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  recommender-service:
+    build:
+      context: ./recommender-service
+      dockerfile: ../Dockerfile.recommender-service
+    ports:
+      - "8101:8001" 
+    depends_on:
+      - data-service
+    environment:
+      - DATA_SERVICE_URL=http://data-service:8000
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:8001/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  health-gateway:
+    build:
+      context: ./health-gateway
+    ports:
+      - "8150:8050" 
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "8551:80" 
+    depends_on:
+      - health-gateway
+
+volumes:
+  mongodb_data:

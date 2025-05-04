@@ -1,0 +1,69 @@
+services:
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=password
+
+  data-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.data-service
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mongodb
+    environment:
+      - MONGODB_URI=mongodb://admin:password@mongodb:27017
+      - DATABASE_NAME=train_data
+    volumes:
+      - ./datasets:/app/datasets
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:8000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  recommender-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.recommender-service
+    ports:
+      - "8001:8001"
+    depends_on:
+      - mongodb
+      - data-service
+    environment:
+      - MONGODB_URI=mongodb://admin:password@mongodb:27017
+      - DATABASE_NAME=train_data
+      - DATA_SERVICE_URL=http://data-service:8000
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:8001/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    ports:
+      - "8501:80"
+    depends_on:
+      - data-service
+      - recommender-service
+  health-gateway:
+    build:
+      context: ./health-gateway
+    ports:
+      - "8050:8050"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+
+volumes:
+  mongodb_data:

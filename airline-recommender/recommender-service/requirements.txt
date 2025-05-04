@@ -1,0 +1,6 @@
+fastapi
+uvicorn
+pandas
+scikit-surprise
+requests
+numpy<2
