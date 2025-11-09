@@ -21,7 +21,7 @@ services:
       - MONGODB_URI=mongodb://admin:password@mongodb:27017
       - DATABASE_NAME=train_data
     volumes:
-      - ./datasets:/app/datasets
+      - ./data-service/datasets:/app/datasets
     healthcheck:
       test: ["CMD", "curl", "-f", "http://127.0.0.1:8000/health"]
       interval: 30s

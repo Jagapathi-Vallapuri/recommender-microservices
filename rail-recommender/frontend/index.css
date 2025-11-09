@@ -1,41 +1,37 @@
 body {
-    font-family: sans-serif;
-    background-color: #121212;
-    color: white;
     margin: 0;
-    padding: 2rem;
+    background-color: #111;
+    color: #fff;
+    font-family: sans-serif;
   }
   
   .container {
-    max-width: 800px;
-    margin: auto;
+    padding: 2rem;
     text-align: center;
   }
   
   .grid {
     display: flex;
-    gap: 1rem;
-    justify-content: center;
     flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2rem;
   }
   
   .card {
-    background: #1e1e1e;
-    padding: 1rem 2rem;
+    background: #1f1f1f;
+    padding: 1rem;
     border-radius: 8px;
-    min-width: 200px;
-    box-shadow: 0 0 10px #000;
+    width: 200px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
   }
   
   .card.healthy {
-    border-left: 5px solid #00c853;
+    border: 2px solid limegreen;
   }
   
+  .card.error,
   .card.unhealthy {
-    border-left: 5px solid #ff9800;
-  }
-  
-  .card.down {
-    border-left: 5px solid #d50000;
+    border: 2px solid crimson;
   }
   

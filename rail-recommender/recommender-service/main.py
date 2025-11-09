@@ -68,7 +68,7 @@ async def recommend_trains(train_number: str, top_n: int = 5):
     
     except Exception as e:
         import traceback
-        traceback.print_exc()  # helps debug in logs
+        traceback.print_exc()  
         raise HTTPException(status_code=500, detail=str(e) or "Unknown error occurred")
 
     
