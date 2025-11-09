@@ -12,13 +12,12 @@ app = FastAPI()
 # Enable CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # or ["http://localhost:8501"]
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# MongoDB config
 MONGODB_URI = os.getenv("MONGODB_URI", "mongodb://localhost:27017")
 DATABASE_NAME = os.getenv("DATABASE_NAME", "flight_data")
 client = MongoClient(MONGODB_URI)
@@ -55,7 +54,6 @@ import math
 async def get_users(limit: int = 100):
     users = list(interactions_collection.find({}, {'_id': 0}).limit(limit))
     
-    # Convert non-JSON-compliant floats to None
     for user in users:
         for k, v in user.items():
             if isinstance(v, float) and (math.isnan(v) or math.isinf(v)):

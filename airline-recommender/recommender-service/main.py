@@ -18,7 +18,6 @@ all_flight_ids = []
 def load_and_train_model():
     global flight_name_map, booked_users, algo, all_flight_ids
 
-    # Retry loop
     for _ in range(10):
         try:
             users = requests.get(f"{DATA_SERVICE_URL}/users").json()

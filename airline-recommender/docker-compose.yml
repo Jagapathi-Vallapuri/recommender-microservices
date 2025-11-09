@@ -12,9 +12,7 @@ services:
   data-service:
     build:
       context: ./data-service
-      dockerfile: ../Dockerfile.data-service
-    ports:
-      - "8100:8000"  
+      dockerfile: ../Dockerfile.data-service 
     depends_on:
       - mongodb
     environment:

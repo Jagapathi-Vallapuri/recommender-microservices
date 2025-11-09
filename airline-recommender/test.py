@@ -2,14 +2,6 @@ import requests
 
 # Define service endpoints
 services = {
-    "data-service": {
-        "base_url": "http://localhost:8100",
-        "routes": [
-            "/health",
-            "/users",
-            "/flights"
-        ]
-    },
     "recommender-service": {
         "base_url": "http://localhost:8101",
         "routes": [
