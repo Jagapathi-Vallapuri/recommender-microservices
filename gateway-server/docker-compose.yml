@@ -1,0 +1,11 @@
+services:
+  gateway-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "9000:9000"
+    environment:
+      - AIRLINE_RECOMMENDER_URL=http://host.docker.internal:8101
+      - RAIL_RECOMMENDER_URL=http://host.docker.internal:8001
+      - GATEWAY_TIMEOUT_SECONDS=10

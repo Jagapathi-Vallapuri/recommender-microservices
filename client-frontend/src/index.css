@@ -1,0 +1,138 @@
+body {
+  margin: 0;
+  background-color: #111;
+  color: #fff;
+  font-family: sans-serif;
+}
+
+.container {
+  padding: 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+h1 {
+  margin: 0 0 0.5rem 0;
+}
+
+.subtle {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.form {
+  margin-top: 1.5rem;
+  background: #1f1f1f;
+  padding: 1rem;
+  border-radius: 10px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+}
+
+.row {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  min-width: 220px;
+}
+
+label.wide {
+  min-width: 460px;
+  flex: 1;
+}
+
+input,
+select {
+  background: #111;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: 0.6rem 0.7rem;
+  outline: none;
+}
+
+input:focus,
+select:focus {
+  border-color: rgba(0, 255, 127, 0.6);
+}
+
+.button {
+  background: #2f2f2f;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: 0.7rem 1rem;
+  cursor: pointer;
+}
+
+.button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.error {
+  margin-top: 1rem;
+  padding: 0.8rem 1rem;
+  border-radius: 10px;
+  border: 2px solid crimson;
+  background: rgba(220, 20, 60, 0.12);
+}
+
+.results {
+  margin-top: 1.5rem;
+}
+
+.meta {
+  margin-bottom: 1rem;
+  background: #1f1f1f;
+  padding: 1rem;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.card {
+  background: #1f1f1f;
+  padding: 1rem;
+  border-radius: 10px;
+  width: 300px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.card.healthy {
+  border: 2px solid limegreen;
+}
+
+.card.unhealthy {
+  border: 2px solid crimson;
+}
+
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.pre {
+  margin: 0.8rem 0 0 0;
+  padding: 0.7rem;
+  background: #111;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  overflow: auto;
+  font-size: 12px;
+}
+
+.raw {
+  margin-top: 1rem;
+}

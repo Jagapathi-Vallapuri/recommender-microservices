@@ -1,23 +1,24 @@
 services:
-  mongodb:
-    image: mongo:latest
+  postgres:
+    image: postgres:16
     ports:
-      - "27117:27017"
+      - "5433:5432"
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=admin
-      - MONGO_INITDB_ROOT_PASSWORD=password
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=flight_data
     volumes:
-      - mongodb_data:/data/db
+      - airline_postgres_data:/var/lib/postgresql/data
+      - ./db/init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
 
   data-service:
     build:
       context: ./data-service
       dockerfile: ../Dockerfile.data-service 
     depends_on:
-      - mongodb
+      - postgres
     environment:
-      - MONGODB_URI=mongodb://admin:password@mongodb:27017
-      - DATABASE_NAME=flight_data
+      - DATABASE_URL=postgresql://admin:password@postgres:5432/flight_data
     volumes:
       - ./data-service/dataset:/app/dataset
     healthcheck:
@@ -60,4 +61,4 @@ services:
       - health-gateway
 
 volumes:
-  mongodb_data:
+  airline_postgres_data:

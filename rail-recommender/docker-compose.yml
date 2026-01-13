@@ -1,23 +1,24 @@
 services:
-  mongodb:
-    image: mongo:latest
+  postgres:
+    image: postgres:16
     ports:
-      - "27017:27017"
-    volumes:
-      - mongodb_data:/data/db
+      - "5434:5432"
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=admin
-      - MONGO_INITDB_ROOT_PASSWORD=password
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=train_data
+    volumes:
+      - rail_postgres_data:/var/lib/postgresql/data
+      - ./db/init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
 
   data-service:
     build:
       context: .
       dockerfile: Dockerfile.data-service
     depends_on:
-      - mongodb
+      - postgres
     environment:
-      - MONGODB_URI=mongodb://admin:password@mongodb:27017
-      - DATABASE_NAME=train_data
+      - DATABASE_URL=postgresql://admin:password@postgres:5432/train_data
     volumes:
       - ./data-service/datasets:/app/datasets
     healthcheck:
@@ -33,11 +34,8 @@ services:
     ports:
       - "8001:8001"
     depends_on:
-      - mongodb
       - data-service
     environment:
-      - MONGODB_URI=mongodb://admin:password@mongodb:27017
-      - DATABASE_NAME=train_data
       - DATA_SERVICE_URL=http://data-service:8000
     healthcheck:
       test: ["CMD", "curl", "-f", "http://127.0.0.1:8001/health"]
@@ -64,4 +62,4 @@ services:
 
 
 volumes:
-  mongodb_data:
+  rail_postgres_data:

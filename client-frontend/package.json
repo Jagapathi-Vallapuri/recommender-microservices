@@ -1,0 +1,19 @@
+{
+  "name": "recommender-client-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host --port 8600 --strictPort",
+    "build": "vite build",
+    "preview": "vite preview --host --port 8600 --strictPort"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.0.0",
+    "vite": "^4.4.9"
+  }
+}

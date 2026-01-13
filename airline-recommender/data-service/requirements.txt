@@ -1,5 +1,3 @@
 fastapi
-pymongo
-python-dotenv
-pandas
 uvicorn
+psycopg2-binary

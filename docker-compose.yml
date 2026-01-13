@@ -1,0 +1,91 @@
+services:
+  # -------------------------
+  # Airline stack
+  # -------------------------
+  airline-postgres:
+    image: postgres:16
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=flight_data
+    volumes:
+      - airline_postgres_data:/var/lib/postgresql/data
+      - ./airline-recommender/db/init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+
+  airline-data-service:
+    build:
+      context: ./airline-recommender/data-service
+      dockerfile: ../Dockerfile.data-service
+    depends_on:
+      - airline-postgres
+    environment:
+      - DATABASE_URL=postgresql://admin:password@airline-postgres:5432/flight_data
+    volumes:
+      - ./airline-recommender/data-service/dataset:/app/dataset
+
+  airline-recommender-service:
+    build:
+      context: ./airline-recommender/recommender-service
+      dockerfile: ../Dockerfile.recommender-service
+    depends_on:
+      - airline-data-service
+    environment:
+      - DATA_SERVICE_URL=http://airline-data-service:8000
+
+  # -------------------------
+  # Rail stack
+  # -------------------------
+  rail-postgres:
+    image: postgres:16
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=train_data
+    volumes:
+      - rail_postgres_data:/var/lib/postgresql/data
+      - ./rail-recommender/db/init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+
+  rail-data-service:
+    build:
+      context: ./rail-recommender
+      dockerfile: Dockerfile.data-service
+    depends_on:
+      - rail-postgres
+    environment:
+      - DATABASE_URL=postgresql://admin:password@rail-postgres:5432/train_data
+    volumes:
+      - ./rail-recommender/data-service/datasets:/app/datasets
+
+  rail-recommender-service:
+    build:
+      context: ./rail-recommender
+      dockerfile: Dockerfile.recommender-service
+    depends_on:
+      - rail-data-service
+    environment:
+      - DATA_SERVICE_URL=http://rail-data-service:8000
+
+  # -------------------------
+  # Gateway
+  # -------------------------
+  gateway-server:
+    build:
+      context: ./gateway-server
+      dockerfile: Dockerfile
+    ports:
+      - "9000:9000"
+    depends_on:
+      - airline-recommender-service
+      - rail-recommender-service
+    environment:
+      - AIRLINE_RECOMMENDER_URL=http://airline-recommender-service:8001
+      - RAIL_RECOMMENDER_URL=http://rail-recommender-service:8001
+      - AIRLINE_DATA_SERVICE_URL=http://airline-data-service:8000
+      - RAIL_DATA_SERVICE_URL=http://rail-data-service:8000
+      - AIRLINE_POSTGRES_HOST=airline-postgres
+      - RAIL_POSTGRES_HOST=rail-postgres
+      - GATEWAY_TIMEOUT_SECONDS=10
+
+volumes:
+  airline_postgres_data:
+  rail_postgres_data:
